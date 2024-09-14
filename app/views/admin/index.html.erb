@@ -1,0 +1,43 @@
+<div class="admin-content">
+  <h1>User Management</h1>
+  <div class="table-responsive">
+    <table class="table" style="color: white;">
+      <thead class="thead-dark">
+        <tr>
+          <th>Email</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Role</th>
+          <th>Approved</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr id="user-<%= user.id %>">
+            <td><%= user.email %></td>
+            <td><%= user.first_name %></td>
+            <td><%= user.last_name %></td>
+            <td><%= user.role %></td>
+            <td class="text-center" id="approved-<%= user.id %>"><%= user.approved? ? 'Yes' : 'No' %></td>
+            <td class="d-flex justify-content-center align-items-center">
+              <% if user.approved? %>
+                <%= form_with(url: approve_requests_path, method: :get, local: true) do |form| %>
+                  <%= form.hidden_field :user_id, value: user.id %>
+                  <%= form.hidden_field :approved, value: '0' %>
+                  <%= form.submit 'Unapprove', class: 'btn btn-danger btn-sm' %>
+                <% end %>
+              <% else %>
+                <%= form_with(url: approve_requests_path, method: :get, local: true) do |form| %>
+                  <%= form.hidden_field :user_id, value: user.id %>
+                  <%= form.hidden_field :approved, value: '1' %>
+                  <%= form.submit 'Approve', class: 'btn btn-success btn-sm' %>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
